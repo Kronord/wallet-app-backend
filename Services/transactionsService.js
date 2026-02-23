@@ -4,10 +4,11 @@ const { User } = require("../Models/UserModel");
 // Get all transactions
 const getTransactions = async ({ _id }) =>
   await Transaction.find({ owner: _id });
+
 // Post transaction
 const createTransaction = async ({ data, _id }) => {
   const { balance } = await User.findById(_id);
-  const {transactionType, amount} = data;
+  const { transactionType, amount } = data;
   let totalBalance = balance;
   switch (transactionType) {
     case 'Дохід':
@@ -19,7 +20,7 @@ const createTransaction = async ({ data, _id }) => {
     default:
       break;
   };
-  await User.findByIdAndUpdate(_id, {balance: totalBalance});
+  await User.findByIdAndUpdate(_id, { balance: totalBalance });
   Transaction.create({ ...data, owner: _id, balance: totalBalance });
 };
 

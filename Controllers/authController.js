@@ -10,10 +10,12 @@ const registrationController = async (req, res, next) => {
           message: "Email in use",
         })
       );
-    }
+    };
+    const {payload, token} = userData;
     res.status(201).json(
       errorOrResponce("201 Created", {
-        user: userData,
+        user: payload,
+        token,
       })
     );
   } catch (error) {

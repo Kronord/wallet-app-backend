@@ -17,7 +17,19 @@ const registerUser = async ({ username, email, password }) => {
 
   await user.save();
 
-  return { username, email, message: "Registration successfull" };
+   const userId = await User.findOne({ email });
+  const { _id } = userId;
+
+  const payload = {
+    _id,
+    email,
+    username,
+  };
+
+  const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "1h" });
+  await User.findByIdAndUpdate(_id, { token });
+
+  return { payload, token};
 };
 
 const loginUser = async ({email, password}) => {
